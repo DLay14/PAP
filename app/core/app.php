@@ -1,4 +1,4 @@
-Class App
+Class app
 {
     protected $controller = "home";
     protected $method = "index";
