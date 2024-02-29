@@ -2,7 +2,7 @@
 class App
 {
     // Controlador padrão
-    protected $controller = "home";
+    protected $controller = "login";
     // Método padrão
     protected $method = "index";
     // Parâmetros da URL
