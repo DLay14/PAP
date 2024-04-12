@@ -46,7 +46,7 @@ Class User
         /*
         * Check if the email exists
         */
-        $sql = "select * from users where email = :email limit 1";
+        $sql = "select * from user where email = :email limit 1";
         $arr ['email']= $data['email'];
         $check = $db->read($sql,$arr);
         if(is_array($check))
@@ -60,7 +60,7 @@ Class User
         * Check if the url_address exists
         */
         $arr = false;
-        $sql = "select * from users  where url_address = :url_address limit 1";
+        $sql = "select * from user  where url_address = :url_address limit 1";
         $arr['url_address']=$data['url_address'];
         $check = $db->read($sql, $arr);
         if (is_array($check)) {
@@ -75,7 +75,7 @@ Class User
             $data['date'] = date("Y-m-d H:i:s");
             $data['password'] = hash('sha1', $data['password']);
             
-            $query = "insert into users (url_address,name,email,password,date,role) values(:url_address,:name,:email,:password,:date,:role)";            
+            $query = "insert into user (idUser,Nome,Telefone,Email,Password,url_address) values(:idUser,:Nome,:Telefone,:Email,:Password,:url_address)";            
             $result = $db->write($query,$data);
             var_dump($result);
             if($result)

@@ -29,6 +29,11 @@
                       <div class="invalid-feedback">Please, enter your name!</div>
                     </div>
 
+                    <div class="col-12">
+                      <label for="yourName" class="form-label">Your Telefone</label>
+                      <input type="text" name="telefone" value="<?= isset($_POST['telefone']) ? $_POST['telefone'] : ''; ?>" class="form-control" id="yourTelefone" required>
+                      <div class="invalid-feedback">Telefone</div>
+
                     <!-- Email span validation -->
                     <span sytle="color:red"><?php check_error() ?></span>
 
