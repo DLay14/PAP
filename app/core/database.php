@@ -1,21 +1,27 @@
 <?php
-class Database
-{
-    public static $con;
 
+Class Database 
+{
+
+    //Make conection to database mysql
+
+    public static $con;
 
     public function __construct()
     {
         try{
-            $string = DB_TYPE . ":host=" . DB_HOST . ";dbname=" .DB_NAME;
-            //echo($string)
-            self::$con = new PDO($string , DB_USER , DB_PASS);
 
+            $string = DB_TYPE . ":host=" . DB_HOST . ";dbname=" . DB_NAME;
+            echo($string);
+            self::$con = new PDO($string , DB_USER , DB_PASS);
 
         }
         catch (PDOException $e){
+
             die($e->getMessage());
+
         }
+
     }
 
     public static function getInstance()
@@ -24,15 +30,16 @@ class Database
         {
             return self::$con;
         }
-        
+
         //self::$con = new self();
         return $instance = new self();
     }
 
+    //read data from database
     public function read($query, $data = array())
     {
         $stm = self::$con->prepare($query);
-        $result = $stm ->execute($data);
+        $result = $stm->execute($data);
 
         if($result)
         {
@@ -42,12 +49,15 @@ class Database
                 return $data;
             }
         }
+
+        return false;
     }
 
-    public function write($query,  $data = array())
+    //write to database
+    public function write($query, $data = array())
     {
-        $stm = self::$con->prepare($query);~
-        $result = $stm-execute($data);
+        $stm = self::$con->prepare($query);
+        $result = $stm->execute($data);
 
         if($result)
         {
@@ -57,3 +67,8 @@ class Database
         return false;
     }
 }
+/*
+$db = Database::getInstance();
+$data = $db->read("describe users");
+show($data);
+*/

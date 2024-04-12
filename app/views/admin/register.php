@@ -68,9 +68,11 @@
                       </div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                      <button class="btn btn-primary w-100" type="submit">Registar</button>
                     </div>
                     <div class="col-12">
+
+                    </form>
                       <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
                     </div>
 
@@ -81,10 +83,10 @@
                             </div>
                             <a href="">Forgot Password</a>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Registar</button>
+                        <!-- <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Registar</button> -->
                         <p class="text-center mb-0">Already have an Account? <a href="login">Login</a></p>
                     </div>
-                    </form>
+                  
                 </div>
             </div>
         </div>
