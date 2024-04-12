@@ -15,6 +15,7 @@
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                <form class="row g-3 needs-validation" novalidate method= "post" >
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <a href="login" class="">
@@ -22,22 +23,57 @@
                             </a>
                             <h3>Registo</h3>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="jhondoe">
-                            <label for="floatingText">Nome</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" name="telefone" placeholder="jhondoe">
-                            <label for="floatingText">Telefone</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
-                            <label for="floatingInput">Email</label>
-                        </div>
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="Password" name="password" placeholder="Password">
-                            <label for="floatingPassword">Palavra-passe</label>
-                        </div>
+                        <div class="col-12">
+                      <label for="yourName" class="form-label">Your Name</label>
+                      <input type="text" name="name" value="<?= isset($_POST['name']) ? $_POST['name'] : ''; ?>" class="form-control" id="yourName" required>
+                      <div class="invalid-feedback">Please, enter your name!</div>
+                    </div>
+
+                    <!-- Email span validation -->
+                    <span sytle="color:red"><?php check_error() ?></span>
+
+
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">Your Email</label>
+                      <input type="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : ''; ?>" class="form-control" id="yourEmail" required>
+                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourUsername" class="form-label">Username</label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="text" name="username" class="form-control" id="yourUsername" required>
+                        <div class="invalid-feedback">Please choose a username.</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <div class="invalid-feedback">Please enter your password!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword2" class="form-label">Password</label>
+                      <input type="password2" name="password2" class="form-control" id="yourPassword" required>
+                      <div class="invalid-feedback">Rewrite your password again please!</div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
+                        <div class="invalid-feedback">You must agree before submitting.</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
+                    </div>
+
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -48,6 +84,7 @@
                         <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Registar</button>
                         <p class="text-center mb-0">Already have an Account? <a href="login">Login</a></p>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>

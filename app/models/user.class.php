@@ -52,7 +52,7 @@ Class User
             
             $query = "insert into users (url_address,name,email,password,date,role) values(:url_address,:name,:email,:password,:date,:role)";            
             $result = $db->write($query,$data);
-
+            var_dump($result);
             if($result)
             {
                 header("Location: " . ROOT . "login");
@@ -62,4 +62,49 @@ Class User
 
             $_SESSION['error'] = $this->error;
     }
+
+    $sql = "select * from users where email = :email limit 1";
+    $arr ['email']= $data['email'];
+
+    $check = $db->read($sql,$arr);
+    if(is_array($check))
+    {
+        $this->error .= "This email already exists! <br> ";
+    }
+
+    private function get_random_string_max($length)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $random_string = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $random_string = $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return  $random_string;
+    }
+
+    $data['url_address'] = $this->get_random_string_max(60);
+
+    $arr = false;
+    $sql = "select * from users  where url_address = :url_address limit 1";
+    $arr['url_address']=$data['url_address'];
+    $check = $db->read($sql, $arr);
+    if (is_array($check)) {
+        $data['url_address'] = $this->get_random_string_max(60);
+    }
+
+    if($this->error == ""){
+        $data['role'] = "costumer";
+        $data['date'] = date("Y-m-d H:i:s");
+        $data['password'] = hash('sha1', $data['password']);
+        $query = "insert into users(url_address,name,email,password,date,role) values(:url_address,:name,:email,:password,:date,:role)";
+        $result = $db->write($query,$data);
+
+        if($result){
+            header("location: ". ROOT ."login");
+            die;
+        }
+    }
+    $_SESSION['error'] = $this->error;
 }
