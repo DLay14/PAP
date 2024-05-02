@@ -10,7 +10,7 @@ Class Register extends Controller
             $User = $this->load_model("User");
             $User->signup($_POST);
         }
-
+ 
         $this->view("register");
     }
 }

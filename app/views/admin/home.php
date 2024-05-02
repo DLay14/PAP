@@ -1,7 +1,20 @@
-<?php $this->view( "_includes/admin_header", $data); ?>
+<?php 
+
+if (isset($_SESSION)) {
+    echo "Session is started with ID: " . session_id();
+    echo "<pre>";
+    print_r($_SESSION);
+    echo "</pre>";
+} else {
+    echo "Session is not started";
+}
+
+$this->view( "_includes/admin_header", $data); 
+
+?>
 
 <body>
-    <div class="container-fluid position-relative d-flex p-0">
+<div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start 
         <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -136,12 +149,12 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="<?= ASSETS ?>img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <span class="d-none d-lg-inline-flex"><?php //echo $data['user_data']->nome; ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
                             <a href="#" class="dropdown-item">Settings</a>
-                            <a href="login" class="dropdown-item">Log Out</a>
+                            <a href="logout" class="dropdown-item">Logout</a>
                         </div>
                     </div>
                 </div>

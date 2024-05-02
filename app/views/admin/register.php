@@ -24,70 +24,41 @@
                             <h3>Registo</h3>
                         </div>
                         <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
+                      <label for="yourName" class="form-label">Nome</label>
                       <input type="text" name="name" value="<?= isset($_POST['name']) ? $_POST['name'] : ''; ?>" class="form-control" id="yourName" required>
                       <div class="invalid-feedback">Please, enter your name!</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your Telefone</label>
+                      <label for="yourName" class="form-label">Telefone</label>
                       <input type="text" name="telefone" value="<?= isset($_POST['telefone']) ? $_POST['telefone'] : ''; ?>" class="form-control" id="yourTelefone" required>
                       <div class="invalid-feedback">Telefone</div>
-
-                    <!-- Email span validation -->
-                    <span sytle="color:red"><?php check_error() ?></span>
-
-
                     <div class="col-12">
-                      <label for="yourEmail" class="form-label">Your Email</label>
+                      <label for="yourEmail" class="form-label">Email</label>
                       <input type="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : ''; ?>" class="form-control" id="yourEmail" required>
                       <div class="invalid-feedback">Please enter a valid Email adddress!</div>
                     </div>
-
-                    <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                      </div>
-                    </div>
-
+                    
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
                       <input type="password" name="password" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
-
+                    <span sytle="color:red"><?php check_error() ?></span>
                     <div class="col-12">
                       <label for="yourPassword2" class="form-label">Password</label>
                       <input type="password2" name="password2" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Rewrite your password again please!</div>
                     </div>
-
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
-                      </div>
-                    </div>
+                    <br>
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Registar</button>
                     </div>
                     <div class="col-12">
 
                     </form>
-                      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
                     </div>
-
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div>
-                            <a href="">Forgot Password</a>
-                        </div>
+                    <br>
                         <!-- <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Registar</button> -->
                         <p class="text-center mb-0">Already have an Account? <a href="login">Login</a></p>
                     </div>

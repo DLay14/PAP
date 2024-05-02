@@ -38,10 +38,6 @@ Class User
             $this->error .= "Password must be at last 4 characters long! <br>";
         }
 
-        // if(strlen($data['telefone']) = 9 && (strlen($data['telefone']) < 12 ))
-        // {
-        //     $this->error .= "Password must be at last 4 characters long! <br>";
-        // }
 
         /*
         * Check if the email exists
@@ -55,7 +51,7 @@ Class User
         }
 
         $data['url_address'] = $this->get_random_string_max(60);
-
+        // show(get_random_string_max(60));
         /*
         * Check if the url_address exists
         */
@@ -71,13 +67,14 @@ Class User
         if($this->error == "")
         {
             //save at database
-            $data['role'] = "costumer";
+            $data['idUser'] = "";
+            $data['active'] = "";
             $data['date'] = date("Y-m-d H:i:s");
             $data['password'] = hash('sha1', $data['password']);
             
-            $query = "insert into user (idUser,Nome,Telefone,Email,Password,url_address) values(:idUser,:Nome,:Telefone,:Email,:Password,:url_address)";            
+            $query = "insert into user (idUser,nome,telefone,email,password,active,url_address,date) values(:idUser,:name,:telefone,:email,:password, :active,:url_address, :date)";            
             $result = $db->write($query,$data);
-            var_dump($result);
+            // show($result);
             if($result)
             {
                 header("Location: " . ROOT . "login");
@@ -88,19 +85,100 @@ Class User
         $_SESSION['error'] = $this->error;
 
     } 
-
-    private function get_random_string_max($length)
+    public function get_random_string_max($length)
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $random_string = '';
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $random_string = '';
 
-        for ($i = 0; $i < $length; $i++) {
-            $random_string = $characters[rand(0, strlen($characters) - 1)];
-        }
-
-        return  $random_string;
+    for ($i = 0; $i < $length; $i++) {
+        $random_string.= $characters[rand(0, strlen($characters) - 1)];
     }
 
+    return $random_string;
+    }
+
+    function Login($POST)
+    {
+        $data = array();
+        $db = Database::getInstance();
+
+        $data['email']          = trim($POST['email']);
+        $data['password']       = trim($POST['password']);
+
+        if(empty($data['email']) || !preg_match("/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/", $data['email']))
+        {
+            $this->error .= "Por favor insira um email válido! <br>";
+        }
+
+        if(strlen($data['password']) < 4 )
+        {
+            $this->error .= "Password tem que ser maior que 4 caracteres! <br>";
+        }
+
+        if($this->error == "")
+        {
+            //confirm
+            $data['password'] = hash('sha1', $data['password']);
+
+            $sql = "select * from user where email = :email && password = :password limit 1";
+            $arr['email'] = $data['email'];
+            $result= $db->read($sql,$data);
+            if(is_array($result))
+            {
+                $_SESSION['user_url'] = $result[0]->url_address;
+                header("Location: ". ROOT ."home");
+                die;
+            }
+            $this->error .= "Email ou password inválidos! <br>";
+        }
+        $_SESSION['error'] = $this->error;
+        
+    }
+
+    public function logout(){
+        if(isset($_SESSION['user_url']))
+        {
+            unset($_SESSION['user_url']);
+        }
+        header("Location: " . ROOT . "login");
+        die;
+    }
+
+    function check_login($redirect = false, $allowed = array())
+    {
+        if(!isset($_SESSION['user_url'])){
+            if($redirect){
+                header("Location: ". ROOT . "login");
+                exit;
+            }
+            return false;
+        }
+
+        $db = Database::getInstance();
+        $url = $_SESSION['user_url'];
+
+        $query = "Select * From user Where url_address = :url LIMIT 1";
+        $result = $db->read($query, array('url' => $url));
+
+        if(!$result){
+            if($redirect){
+                header("Location: ". ROOT . "login");
+                exit;
+            }
+            return false;
+        }
+
+        $user = $result[0];
+        if(!empty($allowed) && !in_array($user->role, $allowed)){
+            if($redirect){
+                header("Location: ". ROOT . "login");
+                exit;
+            }
+            return false;
+        }
+        return $user;
+        
+    }
 
 
 }

@@ -68,7 +68,7 @@ Class Database
     }
 }
 /*
-$db = Database::getInstance();
+$db = Database::getInstance();  
 $data = $db->read("describe users");
 show($data);
 */
