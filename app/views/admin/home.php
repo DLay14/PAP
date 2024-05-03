@@ -149,7 +149,8 @@ $this->view( "_includes/admin_header", $data);
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="<?= ASSETS ?>img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex"><?php //echo $data['user_data']->nome; ?></span>
+                        <span class="d-none d-lg-inline-flex"><?php echo $data['user_data']->name; ?></span>
+</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
