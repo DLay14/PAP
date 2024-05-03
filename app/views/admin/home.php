@@ -1,19 +1,11 @@
 <?php 
 
-if (isset($_SESSION)) {
-    echo "Session is started with ID: " . session_id();
-    echo "<pre>";
-    print_r($_SESSION);
-    echo "</pre>";
-} else {
-    echo "Session is not started";
-}
-
 $this->view( "_includes/admin_header", $data); 
 
 ?>
 
 <body>
+<?php show($data['user_data']->nome); ?>
 <div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start 
         <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -149,7 +141,7 @@ $this->view( "_includes/admin_header", $data);
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="<?= ASSETS ?>img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                        <span class="d-none d-lg-inline-flex"><?php echo $data['user_data']->name; ?></span>
+                        <span class="d-none d-lg-inline-flex"><?php echo $data['user_data']->nome; ?></span>
 </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
