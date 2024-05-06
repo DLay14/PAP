@@ -7,12 +7,12 @@ Class Home extends Controller
     {
         $User = $this->load_model('User');
         $user_data = $User->check_login(true);
-        show($user_data);
+        // show($user_data);
         //validate if the users is logged in
         if(is_object($user_data)){
             $data['user_data'] = $user_data;
         }
         $data['page_title'] = "Home - Dashboard";
-        $this->view("home");
+        $this->view("home",$data);
     }
 }

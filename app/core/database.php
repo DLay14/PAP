@@ -12,7 +12,7 @@ Class Database
         try{
 
             $string = DB_TYPE . ":host=" . DB_HOST . ";dbname=" . DB_NAME;
-            echo($string);
+            // echo($string);
             self::$con = new PDO($string , DB_USER , DB_PASS);
 
         }
