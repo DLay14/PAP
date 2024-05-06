@@ -71,8 +71,9 @@ Class User
             $data['active'] = "";
             $data['date'] = date("Y-m-d H:i:s");
             $data['password'] = hash('sha1', $data['password']);
+            $data['role'] = "user";
             
-            $query = "insert into user (idUser,nome,telefone,email,password,active,url_address,date) values(:idUser,:name,:telefone,:email,:password, :active,:url_address, :date)";            
+            $query = "insert into user (idUser,nome,telefone,email,password,active,url_address,date,role) values(:idUser,:name,:telefone,:email,:password, :active,:url_address, :date, :role)";            
             $result = $db->write($query,$data);
             // show($result);
             if($result)
