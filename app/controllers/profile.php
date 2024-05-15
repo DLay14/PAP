@@ -1,12 +1,12 @@
 <?php
 
-class Users extends Controller
+class Profile extends Controller
 {
     public function index()
     {
         $User = $this->load_model('User');
 
-        $data['user_data'] = $User->check_login(true, ["user"]);
+        $data['user_data'] = $User->check_login(true);
 
         if(is_array($data['user_data']))
         {
@@ -14,7 +14,14 @@ class Users extends Controller
             show($data['user_data']);
         }
 
+        if ($data['user_data']->role == 'admin') {
+            $this->view("profile", $data);
+        } else {
+            $this->view("../users/profile", $data);
+        }
+        die;
+
         $data['page_title'] = "Teste User Section";
-        $this->view("../users/user_test", $data);
+        
     }
 }

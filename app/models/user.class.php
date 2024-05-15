@@ -124,10 +124,13 @@ Class User
             $sql = "select * from user where email = :email && password = :password limit 1";
             $arr['email'] = $data['email'];
             $result= $db->read($sql,$data);
-            if(is_array($result))
-            {
+            if (is_array($result)) {
                 $_SESSION['user_url'] = $result[0]->url_address;
-                header("Location: ". ROOT ."home");
+                if ($result[0]->role == 'admin') {
+                    header("Location: ". ROOT. "home");
+                } else {
+                    header("Location: ". ROOT. "users");
+                }
                 die;
             }
             $this->error .= "Email ou password inválidos! <br>";
@@ -180,5 +183,17 @@ Class User
         return $user;
         
     }
+    
+    function getServices()
+    {
+        $db = Database::getInstance();
+    
+        $query = "Select * From service";
+        $result = $db->read($query);
+    
+        return $result;
+    }
+
+
     
 }

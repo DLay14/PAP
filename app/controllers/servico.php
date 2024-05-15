@@ -1,12 +1,12 @@
 <?php
 
-class Users extends Controller
+class Servico extends Controller
 {
     public function index()
     {
         $User = $this->load_model('User');
 
-        $data['user_data'] = $User->check_login(true, ["user"]);
+        $data['user_data'] = $User->check_login(true, ["admin"]);
 
         if(is_array($data['user_data']))
         {
@@ -15,6 +15,6 @@ class Users extends Controller
         }
 
         $data['page_title'] = "Teste User Section";
-        $this->view("../users/user_test", $data);
+        $this->view("servico", $data);
     }
 }

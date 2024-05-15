@@ -24,7 +24,7 @@
                             <h3>Registo</h3>
                         </div>
                         <div class="col-12">
-                      <label for="yourName" class="form-label">Nome</label>
+                      <label for="yourName" class="form-label" placeholder="nome">Nome</label>
                       <input type="text" name="name" value="<?= isset($_POST['name']) ? $_POST['name'] : ''; ?>" class="form-control" id="yourName" required>
                       <div class="invalid-feedback">Please, enter your name!</div>
                     </div>
