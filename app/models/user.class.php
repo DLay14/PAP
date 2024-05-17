@@ -183,17 +183,5 @@ Class User
         return $user;
         
     }
-    
-    function getServices()
-    {
-        $db = Database::getInstance();
-    
-        $query = "Select * From service";
-        $result = $db->read($query);
-    
-        return $result;
-    }
 
-
-    
 }
