@@ -23,6 +23,7 @@
     <!-- Libraries Stylesheet -->
     <link href="<?= ASSETS ?>lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="<?= ASSETS ?>lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js" rel="stylesheet"> 
 
     <!-- Customized Bootstrap Stylesheet -->  
     <link href="<?= ASSETS ?>css/bootstrap.min.css" rel="stylesheet">
