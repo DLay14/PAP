@@ -82,7 +82,7 @@ $this->view( "_includes/admin_header", $data);
             <input  type="text" class="form-control" id="category-name" name="category">
 
             <!-- <br> 
-             <select name="cars" id="-name">
+             <select name="cars" id="servico-name">
                 <option value="pintar">pintar</option>
                 <option value="saab">Saab</option>
                 <option value="opel">Opel</option>
@@ -162,6 +162,8 @@ function handle_result(result){
             }).then(() => {
                 $('#categoryModal').modal('hide');
                 document.querySelector("#category-name").value = "";
+
+                location.reload();
             });
         } else {
             Swal.fire({

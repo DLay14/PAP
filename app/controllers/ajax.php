@@ -8,7 +8,7 @@ class Ajax extends Controller
 
         if(is_object($data) && isset($data->data_type) && $data->data_type == 'add_category')
         {
-            $category = $this-load_model('Category');
+            $category = $this->load_model('Category');
             $check = $category->create($data);
 
             //show($data);

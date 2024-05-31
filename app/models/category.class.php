@@ -15,8 +15,8 @@ Class Category{
                 return false;
             }
 
-            $query = "INSERT INTO categories (category) VALUES (:category)";
-            $params = array(':category' => $category);
+            $query = "INSERT INTO servico (teste) VALUES (:teste)";
+            $params = array(':teste' => $category);
             
             $check = $DB->write($query, $params);
             if($check){
