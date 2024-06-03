@@ -47,18 +47,23 @@ $this->view( "_includes/admin_header", $data);
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php if (!empty($data['categories'])):  ?>
+                                    <?php foreach ($data['categories'] as $index => $teste): ?>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?php echo $index +1; ?></td>
+                                    <td><?php echo htmlspecialchars($teste['teste']); ?></td>
+                                    <td>sadasdasda</td>
                                     <td></td>
                                     <td></td>
                                     <td><div class="btn-group" role="group">
                                         <button type="button" href="<?= ROOT ?>category/info" class="btn btn-outline-primary">Info</button>
                                         <button type="button" href="<?= ROOT ?>category/edit" class="btn btn-outline-primary">Editar</button>
-                                        <button type="button" href="<?= ROOT ?>category/delete" class="btn btn-outline-primary">Deletar</button>
+                                        <button type="button" href="<?= ROOT ?>category/delete" class="btn btn-outline-primary"
+                                            onclick="openDeleteModal(<?php echo htmlspecialchars($teste['id']);?>)">Deletar</button>
                                     </div></td>
                                 </tr>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -103,7 +108,27 @@ $this->view( "_includes/admin_header", $data);
   </div>
 </div>
 
-
+<div id="deleteGroupModal" class="modal fade" tabindex="-1" aria-labelledby="deleteGroupModal-Label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deleteGroup">
+                <div class="modal-header">
+                    <h4 class="modal-title">Apagar grupo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem a certeza que quer apagar este serviço?</p>
+                    <p class="text-warning"><small>A açao é irreversivel.</small></p>
+                    <input id="deleteGroupId" name="deleteGroupId" type="hidden" class="form-control" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="delete_row(document.getElementById('deleteGroupId').value)">Apagar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
 
 function clickTeste()
@@ -173,6 +198,21 @@ function handle_result(result){
             });
         }
     }
+}
+
+function openDeleteModal(id){
+    document.getElementById('deleteGroupId').value =id;
+
+    $('#deleteGroupModal').modal('show');
+
+}
+
+function delete_row(id)
+{
+    send_data(data={
+        data_type:"delete_row",
+        id:id
+    })
 }
 
 </script>

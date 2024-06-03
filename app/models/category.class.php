@@ -16,7 +16,7 @@ Class Category{
             }
 
             $query = "INSERT INTO servico (teste) VALUES (:teste)";
-            $params = array(':teste' => $category);
+            $params = array(':teste' => $teste);
             
             $check = $DB->write($query, $params);
             if($check){
@@ -29,5 +29,23 @@ Class Category{
             $_SESSION['error'] = "Dados invalidos para criar serviço.";
         }
         return false;
+    }
+
+    public function get_categories()
+    {
+        $DB = Database::getInstance();
+
+        $query = "Select * From servico";
+        $result = $DB->read($query);
+
+        return json_decode(json_encode($result), true);
+    }
+
+    public function delete($id)
+    {
+        $DB  = Database::getInstance();
+        $id = (int)$id;
+        $query = "delete from servico where id='$id' limit 1";
+        $DB->write($query);
     }
 }

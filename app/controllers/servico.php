@@ -13,6 +13,9 @@ class Servico extends Controller
                 show($data['user_data']);
             }
 
+            $categoryModel = $this->load_model('Category');
+            $data['categories'] = $categoryModel->get_categories();
+
             
             $this->view("servico", $data);
     }
