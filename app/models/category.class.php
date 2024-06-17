@@ -1,33 +1,50 @@
 <?php
 
-Class Category{
+
+Class Category
+{
+
+    private $error = "";
 
     public function create($data)
     {
+
         $DB = Database::getInstance();
 
-        if(!empty($data->data) && $data->data_type == 'add_category')
-        {
-            $category = ucwords(trim($data->data));
+        if (!empty($data->data) && $data->data_type == 'add_servico') {
 
-            if(!preg_match("/^[a-zA-Z]+$/", $category)){
-                $_SESSION['error'] = "Por favor insira o serviço corretamente!";
+            $servico = ucwords(trim($data->servico));
+            $datainicio = ucwords(trim($data->datainicio));
+            $datafim = ucwords(trim($data->datafim));
+            $taskid = $data->task;
+            // $url_add = trim($data->user);
+            if(!preg_match("/^[a-zA-Z]+$/", $servico)) {
+                $_SESSION['error'] = "Por favor insira um nome de serviço correto!";
                 return false;
             }
 
-            $query = "INSERT INTO servico (teste) VALUES (:teste)";
-            $params = array(':teste' => $teste);
-            
-            $check = $DB->write($query, $params);
-            if($check){
-                return true;
-            }   else{
-                $_SESSION['error'] = "Erro ao inserir no banco de dados!";
-            }
+            $query = "INSERT INTO service (idService, TipoServico, DataInicio, DataFim, status, Task_idTask) VALUES (:idService, :TipoServico, :DataInicio, :DataFim, :status, :Task_idTask);";
+            $params = array(':idService' => NULL,
+                            ':TipoServico' => $servico,
+                            ':DataInicio' => $datainicio,
+                            ':DataFim' => $datafim,
+                            ':status' => 0,
+                            ':Task_idTask' => $taskid
+                            );
 
-        }else {
-            $_SESSION['error'] = "Dados invalidos para criar serviço.";
+            $check = $DB->write($query, $params);
+            
+            if($check) {
+                return true;
+
+            } else {
+                $_SESSION['error'] = "Erro ao inserir o serviço na base de dados";
+            }
+            
+        } else {
+            $_SESSION['error'] = "Dados inválidos para inserir o serviço";
         }
+
         return false;
     }
 
@@ -35,17 +52,57 @@ Class Category{
     {
         $DB = Database::getInstance();
 
-        $query = "Select * From servico";
+        $query = "select * from service"; 
         $result = $DB->read($query);
 
+        //show($result);
         return json_decode(json_encode($result), true);
+        
+
     }
 
     public function delete($id)
     {
-        $DB  = Database::getInstance();
+        $DB = Database::getInstance();
         $id = (int)$id;
-        $query = "delete from servico where id='$id' limit 1";
-        $DB->write($query);
+        $query = "DELETE FROM service WHERE idService = '$id' LIMIT 1";
+        $result = $DB->write($query);
+        return $result;
     }
+
+    public function edit($id, $new_servico) {
+        $DB = Database::getInstance();
+
+        $new_servico = ucwords(trim($new_servico));
+        $datainicio = ucwords(trim($datainicio));
+        $datafim = ucwords(trim($datafim));
+        $taskid = ucwords(trim($taskid));
+        if (!preg_match("/^[a-zA-Z]+$/", $new_servico)){
+            $_session['error'] = "Por favor insira um serviço valido!";
+            return false;
+        }
+
+        $query = "UPDATE service set TipoServico = :TipoServico, DataInicio = :DataInicio, DataFim = :DataFim, Task_idTask	= :Task_idTask WHERE idService = :id LIMIT 1";
+        $params = array(':TipoServico' => $new_servico, 
+                        ':DataInicio' => $datainicio,
+                        ':DataFim' => $datafim,
+                        ':Task_idTask' => $taskid,
+                        ':id' => $id
+                        );
+        return $DB->write($query, $params);
+    }
+
+    public function get_task()
+    {
+        $DB = Database::getInstance();
+
+        $query = "select * from task"; 
+        $result = $DB->read($query);
+
+        //show($result);
+        return json_decode(json_encode($result), true);
+        
+
+    }
+
 }

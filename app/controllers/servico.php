@@ -14,8 +14,10 @@ class Servico extends Controller
             }
 
             $categoryModel = $this->load_model('Category');
-            $data['categories'] = $categoryModel->get_categories();
-
+            $data['TipoServico'] = $categoryModel->get_categories();
+            $data['idTask'] = $categoryModel->get_task();
+            // show(       "Estou no controlador");
+            // show(        $data['categories']);
             
             $this->view("servico", $data);
     }

@@ -12,7 +12,7 @@ Class Database
     //     try{
 
     //         $string = DB_TYPE . ":host=" . DB_HOST . ";dbname=" . DB_NAME;
-    //         // echo($string);
+    //         //echo($string);
     //         self::$con = new PDO($string , DB_USER , DB_PASS);
 
     //     }
@@ -66,6 +66,8 @@ Class Database
 
     //     return false;
     // }
+
+
     // Variável estática para armazenar a instância do Database
     private static $instance = null;
 
@@ -128,6 +130,11 @@ Class Database
 
         return false;
     }
+
+
 }
-
-
+/*
+$db = Database::getInstance();
+$data = $db->read("describe users");
+show($data);
+*/
