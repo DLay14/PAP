@@ -179,7 +179,7 @@ $this->view( "_includes/admin_header", $data);
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="edit_row()">Editar</button>
+                    <button type="button" class="btn btn-primary" onclick="edit_service()">Editar</button>
                 </div>               
             </form>
         </div>
@@ -187,216 +187,197 @@ $this->view( "_includes/admin_header", $data);
 </div>
 <script>
 
-function clickTeste()
-{
-    alert("Eu sou muita bom");
-}
-
-function get_data()
-{
-    let servico = document.querySelector("#category-name").value.trim();
-    let datainicio = document.querySelector("#data-inicio").value.trim();
-    let datafim = document.querySelector("#data-fim").value.trim();
-    let task = document.querySelector("#task").value.trim();
-    
-    if(!servico || !isNaN(servico)){
-        Swal.fire({
-            icon: 'error',
-            title: 'Erro',
-            text: 'Por favor insira todos os dados!'
-        });
-        return;
-    }
-    
-    let data = {
-        servico: servico,
-        datainicio: datainicio,
-        datafim: datafim,
-        task: task,
-
-        data_type: 'add_servico'
-    };
-    
-    console.log(data);
-    send_data(data);
-}
-
-function send_data(data = {}){
-
-    var ajax = new XMLHttpRequest();
-
-
-    ajax.addEventListener('readystatechange', function(){
-        if(ajax.readyState === 4 && ajax.status === 200)
-        {
-            handle_result(ajax.responseText);
-        }
-    })
-    ajax.open("POST", "<?=ROOT?>servico/servico",true);
-    ajax.setRequestHeader("Content-Type", "application/json");
-    ajax.send(JSON.stringify(data));
-}
-
-function handle_result(result){
-    if (result != "")
+    function clickTeste()
     {
-        var obj = JSON.parse(result);
-        //console.log(result);
-        if(obj.data_type === "add_servico"){
-            if(obj.message_type === "info")
+        alert("Eu sou muita bom");
+    }
+
+    function get_data() {
+        let servico = document.querySelector("#category-name").value.trim();
+        let datainicio = document.querySelector("#data-inicio").value.trim();
+        let datafim = document.querySelector("#data-fim").value.trim();
+        let task = document.querySelector("#task").value.trim();
+        
+        if (!servico || !isNaN(servico)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Por favor insira todos os dados!'
+            });
+            return;
+        }
+        
+        let data = {
+            servico: servico,
+            datainicio: datainicio,
+            datafim: datafim,
+            task: task,
+            data_type: 'add_service'
+        };
+
+        send_data(data);
+    }
+
+    function send_data(data = {}){
+
+        var ajax = new XMLHttpRequest();
+
+        ajax.addEventListener('readystatechange', function(){
+            if(ajax.readyState === 4 && ajax.status === 200)
             {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sucesso',
-                    text: obj.message
+                handle_result(ajax.responseText);
+            }
+        });
 
-                }).then(() => {
-                    $('#categoryModal').modal('hide');
-                    document.querySelector("#category-name").value = "";
+        ajax.open("POST", "<?=ROOT?>servico/servico",true);
+        ajax.setRequestHeader("Content-Type", "application/json");
+        ajax.send(JSON.stringify(data));
+    }
 
-                    location.reload();
-                });
-            } else {
+
+    function handle_result(result) {
+        console.log("The result is" + result);
+        if (result !== "") {
+            try {
+                var obj = JSON.parse(result);
+                if (obj.data_type === "add_service") {
+                    if (obj.message_type === "info") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: obj.message
+                        }).then(() => {
+                            $('#productModal').modal('hide');
+                            document.querySelector("#product-name").value = "";
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: obj.message
+                        });
+                    }
+                }
+
+                if (obj.data_type === "edit_service") {
+                    if (obj.message_type === "info") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: obj.message
+                        }).then(() => {
+                            $('#editProductModal').modal('hide');
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: obj.message
+                        });
+                    }
+                }
+
+                if (obj.data_type === "delete_service") {
+                    if (obj.message_type === "info") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: obj.message
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: obj.message
+                        });
+                    }
+                }
+            } catch (e) {
                 Swal.fire({
                     icon: 'error',
-                    title:  'Erro',
-                    text: obj.message
+                    title: 'Error',
+                    text: 'An error occurred while processing the server response.'
                 });
             }
         }
     }
 
-    if (obj.data_type === "delete_row") {
-            if (obj.message_type === "info") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sucesso',
-                    text: obj.message
-                }).then(() => {
-                    location.reload();
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro',
-                    text: obj.message
-                });
-            }
+
+
+    function openDeleteModal(idService){
+        document.getElementById('deleteGroupId').value =idService;
+
+        $('#deleteGroupModal').modal('show');
+
     }
 
-    if (obj.data_type === "disabled_row") {
-            if (obj.message_type === "info") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sucesso',
-                    text: obj.message
-                }).then(() => {
-                    location.reload();
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro',
-                    text: obj.message
-                });
-            }
+    function delete_row(idService)
+    {
+        send_data(data={
+            data_type:"delete_service",
+            id:idService
+        });
     }
 
-    if (obj.data_type === "edit_row") {
-            if (obj.message_type === "info") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sucesso',
-                    text: obj.message
-                }).then(() => {
-                    $('#editGroupModal').modal('hide');
-                    location.reload();
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro',
-                    text: obj.message
-                });
-            }
-    }
-}
-
-function openDeleteModal(idService){
-    document.getElementById('deleteGroupId').value =idService;
-
-    $('#deleteGroupModal').modal('show');
-
-}
-
-function delete_row(idService)
-{
-    send_data(data={
-        data_type:"delete_row",
-        id:idService
-    });
-}
-
-function deleteError(){
-    Swal.fire({
-        icon: 'error',
-        title: 'Erro',
-        text: "Voce nao pode apagar um serviço ativo"
-    });
-}
-
-function disabled_row(idService,state){
-    send_data(data = {
-        data_type:"disabled_row",
-        id:idService,
-        current_state:state
-    })
-}
-
-function openEditModal(idService,TipoServico,DataInicio,DataFim,Task_idTask){
-    document.getElementById('editGroupId').value =idService;
-    document.getElementById('editService').value =TipoServico;
-    document.getElementById('edit_data_inicio').value =DataInicio;
-    document.getElementById('edit_data_fim').value =DataFim;
-    document.getElementById('edit_task').value =Task_idTask;
-    // ` 
-    // <h1>teste </h1>
-    // `
-    $('#editGroupModal').modal('show');
-}
-
-function edit_row(){
-
-    let servico_input = document.querySelector("#editService");
-    let datainicio_input = document.querySelector("#edit_data_fim");
-    let datafim_input = document.querySelector("#edit_data_inicio");
-    let task_input = document.querySelector("#edit_task");
-    let id_input = document.querySelector("#editGroupId");
-
-    if (servico_input.value.trim() === "" || !isNaN(servico_input.value.trim())){
+    function deleteError(){
         Swal.fire({
             icon: 'error',
             title: 'Erro',
-            text: 'Por favor insira um serviço valido!'
+            text: "Voce nao pode apagar um serviço ativo"
         });
-        return;
     }
 
-    let data = {
-        servico_input: servico_input,
-        datainicio_input: datainicio_input,
-        datafim_input: datafim_input,
-        task_input: task_input,
-        data_type: 'edit_row'
-    };
-    let id = id_input.value;
-    
-    send_data({
-        id: id,
-        data: data,
-        data_type: 'edit_servico'
-    });
-    
-}
+    function disabled_row(idService,state){
+        send_data(data = {
+            data_type:"disabled_row",
+            id:idService,
+            current_state:state
+        })
+    }
+
+    function openEditModal(idService,TipoServico,DataInicio,DataFim,Task_idTask){
+        document.getElementById('editGroupId').value =idService;
+        document.getElementById('editService').value =TipoServico;
+        document.getElementById('edit_data_inicio').value =DataInicio;
+        document.getElementById('edit_data_fim').value =DataFim;
+        document.getElementById('edit_task').value =Task_idTask;
+        $('#editGroupModal').modal('show');
+    }
+
+    function edit_service() {
+        
+        let servico_input = document.querySelector("#editService").value.trim();
+        let datainicio_input = document.querySelector("#edit_data_inicio").value.trim();
+        let datafim_input = document.querySelector("#edit_data_fim").value.trim();
+        let task_input = document.querySelector("#edit_task").value.trim();
+        let id_input = document.querySelector("#editGroupId").value;
+
+        // Validação básica dos campos
+        if (servico_input === "" || isNaN(id_input)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Por favor, preencha os campos corretamente.'
+            });
+            return;
+        }
+
+        // Objeto com os dados a serem enviados
+        let data = {
+            servico: servico_input,
+            datainicio: datainicio_input,
+            datafim: datafim_input,
+            taskid: task_input,
+            id: id_input,
+            data_type: 'edit_service' // Data_type corrigido para 'edit_service'
+        };
+
+        // Envio dos dados para o controlador PHP via função send_data
+        send_data(data);
+    }
 </script>
 <?php $this->view( "_includes/admin_footer", $data); ?>
