@@ -165,11 +165,11 @@ $this->view( "_includes/admin_header", $data);
                             <input id="editService" name="editService" type="text" class="form-control">
                             <input id="editGroupId" name="editGroupId"  hidden class="form-control" value="">
                             <label for="category-name" class="col-form-label">Data Inicio:</label>
-                            <input type="text" class="form-control" id="edit_data_inicio" name="category">
+                            <input type="text" class="form-control" id="edit_data_inicio" name="edit_data_inicio">
                             <label for="category-name" class="col-form-label">Data Fim:</label>
-                            <input type="text" class="form-control" id="edit_data_fim" name="category">
+                            <input type="text" class="form-control" id="edit_data_fim" name="edit_data_fim">
                             <label for="category-name" class="col-form-label">Task:</label>
-                            <select name="task" id="edit_task" class="form-control" required>
+                            <select name="edit_task" id="edit_task" class="form-control" required>
                             <?php foreach ($data['idTask'] as $task):?>
                                 <option value="<?php echo htmlspecialchars($task['idTask'])?>"><?php echo htmlspecialchars($task['idTask'])?></option>
                             <?php endforeach;?>
@@ -217,6 +217,7 @@ function get_data()
         data_type: 'add_servico'
     };
     
+    console.log(data);
     send_data(data);
 }
 
@@ -231,18 +232,16 @@ function send_data(data = {}){
             handle_result(ajax.responseText);
         }
     })
-    ajax.open("POST", "<?=ROOT?>ajax",true);
+    ajax.open("POST", "<?=ROOT?>servico/servico",true);
     ajax.setRequestHeader("Content-Type", "application/json");
-
     ajax.send(JSON.stringify(data));
 }
 
 function handle_result(result){
     if (result != "")
     {
-        console.log(result);
         var obj = JSON.parse(result);
-        
+        //console.log(result);
         if(obj.data_type === "add_servico"){
             if(obj.message_type === "info")
             {
@@ -354,12 +353,12 @@ function disabled_row(idService,state){
     })
 }
 
-function openEditModal(idService,TipoServico,DataInicio,DataFim,idTask){
+function openEditModal(idService,TipoServico,DataInicio,DataFim,Task_idTask){
     document.getElementById('editGroupId').value =idService;
     document.getElementById('editService').value =TipoServico;
     document.getElementById('edit_data_inicio').value =DataInicio;
     document.getElementById('edit_data_fim').value =DataFim;
-    document.getElementById('edit_task').value =idTask;
+    document.getElementById('edit_task').value =Task_idTask;
     // ` 
     // <h1>teste </h1>
     // `
@@ -391,6 +390,7 @@ function edit_row(){
         data_type: 'edit_row'
     };
     let id = id_input.value;
+    
     send_data({
         id: id,
         data: data,

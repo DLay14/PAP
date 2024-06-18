@@ -84,7 +84,7 @@ class Ajax extends Controller
             $taskid = $data->data;
             
             $check = $servico->edit($id, $new_servico, $datainicio, $datafim, $taskid);
-            
+            // var_dump($check);
             if($check) {
                 $arr['message'] = "Serviço editado com sucesso!";
                 $arr['message_type'] = "info";

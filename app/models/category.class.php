@@ -73,22 +73,24 @@ Class Category
     public function edit($id, $new_servico, $datainicio, $datafim, $taskid) {
         $DB = Database::getInstance();
 
-        $new_servico = ucwords(trim($new_servico));
-        $datainicio = ucwords(trim($datainicio));
-        $datafim = ucwords(trim($datafim));
-        $taskid = trim($taskid);
+        $new_servico = is_string($new_servico) ? ucwords(trim($new_servico)) : '';
+        $datainicio = is_string($datainicio) ? ucwords(trim($datainicio)) : '';
+        $datafim = is_string($datafim) ? ucwords(trim($datafim)) : '';
+        $taskid = is_string($taskid) ? trim($taskid) : '';
+    
         if (!preg_match("/^[a-zA-Z]+$/", $new_servico)){
             $_session['error'] = "Por favor insira um serviço valido!";
             return false;
         }
-
-        $query = "UPDATE from service set TipoServico = :TipoServico, DataInicio = :DataInicio, DataFim = :DataFim, Task_idTask	= :Task_idTask WHERE idService = :id LIMIT 1";
+        
+        $query = "UPDATE from service set TipoServico = :TipoServico, DataInicio = :DataInicio, DataFim = :DataFim, Task_idTask	= :Task_idTask WHERE idService = :idService LIMIT 1";
         $params = array(':TipoServico' => $new_servico, 
                         ':DataInicio' => $datainicio,
                         ':DataFim' => $datafim,
                         ':Task_idTask' => $taskid,
-                        ':id' => $id
+                        ':idService' => $id
                         );
+        console.log($params);
         return $DB->write($query, $params);
     }
 
