@@ -32,7 +32,7 @@ $this->view( "_includes/admin_header", $data);
                 <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <h6 class="mb-0">Serviços</h6>
-                        <button type="button" class="btn btn-link m-2 " data-bs-toggle="modal" data-bs-target="#categoryModal"><i class="fa fa-plus"></i> Adicionar novo</button>
+                        <button type="button" class="btn btn-link m-2 " data-bs-toggle="modal" data-bs-target="#servicoModal"><i class="fa fa-plus"></i> Adicionar novo</button>
                     </div>
                     <div class="table-responsive">
             <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -43,7 +43,7 @@ $this->view( "_includes/admin_header", $data);
                                     <th scope="col">Data Inicio</th>
                                     <th scope="col">Data Fim</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Açao</th>
+                                    <th scope="col">Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,7 +56,7 @@ $this->view( "_includes/admin_header", $data);
                                     <td><?php echo htmlspecialchars($servico['TipoServico']); ?></td>
                                     <td><?php echo htmlspecialchars($servico['DataInicio']); ?></td>
                                     <td><?php echo htmlspecialchars($servico['DataFim']); ?></td>
-                                    <?php if ($servico['status']) :?>
+                                    <?php if ($servico['status']): ?>
 
                                         <td><span class="label label-warning label-mini" style="cursor:pointer"
                                         onclick="disabled_row(<?php echo $servico ['idService'];?>,<?php echo $servico['status'];?>)">Inativo</span></td>
@@ -68,11 +68,12 @@ $this->view( "_includes/admin_header", $data);
 
                                     <?php endif; ?>
                                     <td><div class="btn-group" role="group">
-                                        <button type="button" href="<?= ROOT ?>category/info" class="btn btn-outline-primary">Info</button>
                                         <button type="button" href="<?= ROOT ?>category/edit" class="btn btn-outline-primary"
                       
                                         onclick="openEditModal(<?php echo htmlspecialchars($servico['idService']);?>,
-                                            '<?php echo htmlspecialchars($servico['TipoServico']); ?>')">Editar</button>
+                                            '<?php echo htmlspecialchars($servico['TipoServico']); ?>',
+                                            '<?php echo htmlspecialchars($servico['DataInicio']); ?>',
+                                            '<?php echo htmlspecialchars($servico['DataFim']); ?>',)">Editar</button>
                                         <?php if ($servico['status'] == 1) :?>
                                         <button type="button" href="<?= ROOT ?>category/delete" class="btn btn-outline-primary"
                                             onclick="openDeleteModal(<?php echo htmlspecialchars($servico['idService']);?>)">Deletar</button>
@@ -93,7 +94,7 @@ $this->view( "_includes/admin_header", $data);
 
             
 <!-- ADD service -->
-<div class="modal fade " id="categoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade " id="servicoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content bg-secondary">
       <div class="modal-header">
@@ -106,15 +107,9 @@ $this->view( "_includes/admin_header", $data);
             <label for="category-name" class="col-form-label">Tipo de Serviço:</label>
             <input  type="text" class="form-control" id="category-name" name="category">
             <label for="category-name" class="col-form-label">Data Inicio:</label>
-            <input type="text" class="form-control" id="data-inicio" name="category">
+            <input type="date" class="form-control" id="data-inicio" name="category">
             <label for="category-name" class="col-form-label">Data Fim:</label>
-            <input type="text" class="form-control" id="data-fim" name="category">
-            <label for="category-name" class="col-form-label">Task:</label>
-            <select name="task" id="task" class="form-control" required>
-            <?php foreach ($data['idTask'] as $task):?>
-                <option value="<?php echo htmlspecialchars($task['idTask'])?>"><?php echo htmlspecialchars($task['idTask'])?></option>
-            <?php endforeach;?>
-            </select>
+            <input type="date" class="form-control" id="data-fim" name="category">
           </div>
         </form>
       </div>
@@ -165,15 +160,9 @@ $this->view( "_includes/admin_header", $data);
                             <input id="editService" name="editService" type="text" class="form-control">
                             <input id="editGroupId" name="editGroupId"  hidden class="form-control" value="">
                             <label for="category-name" class="col-form-label">Data Inicio:</label>
-                            <input type="text" class="form-control" id="edit_data_inicio" name="edit_data_inicio">
+                            <input type="date" class="form-control" id="data_inicio" name="data_inicio">
                             <label for="category-name" class="col-form-label">Data Fim:</label>
-                            <input type="text" class="form-control" id="edit_data_fim" name="edit_data_fim">
-                            <label for="category-name" class="col-form-label">Task:</label>
-                            <select name="edit_task" id="edit_task" class="form-control" required>
-                            <?php foreach ($data['idTask'] as $task):?>
-                                <option value="<?php echo htmlspecialchars($task['idTask'])?>"><?php echo htmlspecialchars($task['idTask'])?></option>
-                            <?php endforeach;?>
-                            </select>
+                            <input type="date" class="form-control" id="data_fim" name="data_fim">
                         </div>
                     </form>
                 </div>
@@ -195,9 +184,7 @@ $this->view( "_includes/admin_header", $data);
     function get_data() {
         let servico = document.querySelector("#category-name").value.trim();
         let datainicio = document.querySelector("#data-inicio").value.trim();
-        let datafim = document.querySelector("#data-fim").value.trim();
-        let task = document.querySelector("#task").value.trim();
-        
+        let datafim = document.querySelector("#data-fim").value.trim();        
         if (!servico || !isNaN(servico)) {
             Swal.fire({
                 icon: 'error',
@@ -211,7 +198,6 @@ $this->view( "_includes/admin_header", $data);
             servico: servico,
             datainicio: datainicio,
             datafim: datafim,
-            task: task,
             data_type: 'add_service'
         };
 
@@ -247,8 +233,7 @@ $this->view( "_includes/admin_header", $data);
                             title: 'Success',
                             text: obj.message
                         }).then(() => {
-                            $('#productModal').modal('hide');
-                            document.querySelector("#product-name").value = "";
+                            $('#servicoModal').modal('hide');
                             location.reload();
                         });
                     } else {
@@ -267,7 +252,7 @@ $this->view( "_includes/admin_header", $data);
                             title: 'Success',
                             text: obj.message
                         }).then(() => {
-                            $('#editProductModal').modal('hide');
+                            $('#editGroupModal').modal('hide');
                             location.reload();
                         });
                     } else {
@@ -277,6 +262,10 @@ $this->view( "_includes/admin_header", $data);
                             text: obj.message
                         });
                     }
+                }
+
+                if (obj.data_type === "disabled_row"){
+                    location.reload();
                 }
 
                 if (obj.data_type === "delete_service") {
@@ -332,28 +321,28 @@ $this->view( "_includes/admin_header", $data);
     }
 
     function disabled_row(idService,state){
+        
         send_data(data = {
             data_type:"disabled_row",
-            id:idService,
+            idService:idService,
             current_state:state
-        })
+        });
+        console.log(data);
     }
 
-    function openEditModal(idService,TipoServico,DataInicio,DataFim,Task_idTask){
+    function openEditModal(idService,TipoServico,DataInicio,DataFim){
         document.getElementById('editGroupId').value =idService;
         document.getElementById('editService').value =TipoServico;
-        document.getElementById('edit_data_inicio').value =DataInicio;
-        document.getElementById('edit_data_fim').value =DataFim;
-        document.getElementById('edit_task').value =Task_idTask;
+        document.getElementById('data_inicio').value =DataInicio;
+        document.getElementById('data_fim').value =DataFim;
         $('#editGroupModal').modal('show');
     }
 
     function edit_service() {
         
         let servico_input = document.querySelector("#editService").value.trim();
-        let datainicio_input = document.querySelector("#edit_data_inicio").value.trim();
-        let datafim_input = document.querySelector("#edit_data_fim").value.trim();
-        let task_input = document.querySelector("#edit_task").value.trim();
+        let datainicio_input = document.querySelector("#data_inicio").value.trim();
+        let datafim_input = document.querySelector("#data_fim").value.trim();
         let id_input = document.querySelector("#editGroupId").value;
 
         // Validação básica dos campos
@@ -371,7 +360,6 @@ $this->view( "_includes/admin_header", $data);
             servico: servico_input,
             datainicio: datainicio_input,
             datafim: datafim_input,
-            taskid: task_input,
             id: id_input,
             data_type: 'edit_service' // Data_type corrigido para 'edit_service'
         };
@@ -379,5 +367,6 @@ $this->view( "_includes/admin_header", $data);
         // Envio dos dados para o controlador PHP via função send_data
         send_data(data);
     }
+
 </script>
 <?php $this->view( "_includes/admin_footer", $data); ?>

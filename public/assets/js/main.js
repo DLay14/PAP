@@ -205,21 +205,7 @@
         options: {
             responsive: true
         }
-    });
-
-    const sidebar = document.querySelector('.sidebar');
-const links = document.querySelectorAll('.sidebar a[data-section]');
-
-links.forEach((link) => {
-    console.log('Link clicked:', link);
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const sectionId = link.getAttribute('data-section');
-      sidebar.classList.remove('active'); // remove the active class
-      sidebar.classList.add(`active`); // add the active- class with section ID
-    });
-  });
-
+    });    
     
 })(jQuery);
 

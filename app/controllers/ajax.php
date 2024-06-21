@@ -6,8 +6,8 @@ class Ajax extends Controller
     public function index()
     {
 
-         // Load the Category model
-         $servico = $this->load_model('Category');
+         // Load the service model
+         $servico = $this->load_model('Service');
 
         $data = file_get_contents("php://input");
 
@@ -20,10 +20,6 @@ class Ajax extends Controller
 
 
         if(is_object($data) && isset($data->data_type) && $data->data_type == 'add_servico') {
-
-
-            //$category = $this->load_model('Category');
-           // ESTA CATEGORY QUE CHAMA O MODEL PASSOU A SER PUBLIC
 
             $check = $servico->create($data);
 
@@ -39,7 +35,7 @@ class Ajax extends Controller
             $arr['data'] = "";
             echo json_encode($arr);
         }
-       // Handle deleting a category
+       // Handle deleting a service
         elseif ($data->data_type == 'delete_row') {
             $check = $servico->delete($data->id);
             if ($check === true) {
@@ -56,12 +52,12 @@ class Ajax extends Controller
             echo json_encode($arr);
         }
 
-        elseif($data->data_type == 'disabled_row') {
+        elseif($data->data_type === 'disabled_row') {
 
-            $id = $data->id;
+            $id = $data->idService;
             $status = $data->current_state ? 0: 1;
 
-            $query = "UPDATE service set status = :status Where idService = :idService Limit 1";
+            $query = "UPDATE service SET status = :status Where idService = :idService Limit 1";
             $params = array(':status' => $status, ':idService' => $id);
             $DB = Database::getInstance();
             $DB->write($query, $params);
@@ -81,9 +77,8 @@ class Ajax extends Controller
             $new_servico = $data->data;
             $datainicio = $data->data;
             $datafim = $data->data;
-            $taskid = $data->data;
             
-            $check = $servico->edit($id, $new_servico, $datainicio, $datafim, $taskid);
+            $check = $servico->edit($id, $new_servico, $datainicio, $datafim);
             // var_dump($check);
             if($check) {
                 $arr['message'] = "Serviço editado com sucesso!";
@@ -96,6 +91,23 @@ class Ajax extends Controller
             $arr['data'] = "";
             $arr['data_type'] = "edit_row";
 
+            echo json_encode($arr);
+        }
+
+        elseif($data->data_type == 'add_receipt')
+        {
+            $check = $receipt->create($data);
+
+            if(!empty($_SESSION['error'])) {
+                $arr['message'] =  $_SESSION['error'];
+                $_SESSION['error'] = "";
+                $arr['message_type'] = "error";
+            } else {
+                $arr['message'] = "Serviço adicionado com sucesso!";
+                $arr['message_type'] = "info";
+            }
+
+            $arr['data'] = "";
             echo json_encode($arr);
         }
     }

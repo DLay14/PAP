@@ -15,9 +15,7 @@ class Servico extends Controller
             }
 
             $serviceModel = $this->load_model('Service');
-            $data['TipoServico'] = $serviceModel->get_categories();
-            $data['idTask'] = $serviceModel->get_task();
-
+            $data['TipoServico'] = $serviceModel->get_servico();
             // show($data);
             $this->view("servico", $data);
     }
@@ -63,10 +61,9 @@ class Servico extends Controller
 
                 $new_servico = $data->servico; 
                 $datainicio = $data->datainicio; 
-                $datafim = $data->datafim; 
-                $taskid = $data->taskid; 
+                $datafim = $data->datafim;
     
-                $check = $servico->edit($id, $new_servico, $datainicio, $datafim, $taskid);
+                $check = $servico->edit($id, $new_servico, $datainicio, $datafim);
     
                 if ($check) {
                     $arr['message'] = "Serviço editado com sucesso!";
@@ -78,6 +75,25 @@ class Servico extends Controller
                 $_SESSION['error'] = "";
                 $arr['data'] = "";
                 $arr['data_type'] = "edit_service";
+    
+                echo json_encode($arr);
+            }
+
+            elseif($data->data_type === 'disabled_row') {
+
+                $idService = $data->idService;
+                $status = $data->current_state ? 0: 1;
+    
+                $query = "UPDATE service SET status = :status Where idService = :idService Limit 1";
+                $params = array(':status' => $status, ':idService' => $idService);
+                $DB = Database::getInstance();
+                $DB->write($query, $params);
+    
+                $arr['message'] = "";
+                $_SESSION['error'] = "";
+                $arr['message_type'] = "info";
+                $arr['data'] = "";
+                $arr['data_type'] = "disabled_row";
     
                 echo json_encode($arr);
             }
