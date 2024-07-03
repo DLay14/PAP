@@ -4,7 +4,10 @@
                     <h3 class="text-primary"><i class="fa fa-screwdriver"></i> F.G.S.</h3>
                 </a>
                 <div class="navbar-nav w-100">
-                    <a href="home" class="nav-item nav-link" data-section="home"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="home" class="nav-item nav-link" data-section="home"><i class="fa fa-home me-2"></i>Home</a>
+                    <a href="servico" class="nav-item nav-link " ><i class="fa fa-clipboard me-2"></i>Serviços</a>
+                    <a href="receipts" class="nav-item nav-link "><i class="fa fa-wallet me-2"></i>Recibos</a>
+                    <a href="clientes" class="nav-item nav-link "><i class="fa fa-user me-2"></i>Clientes</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -16,8 +19,6 @@
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
                     <a href="form.html" class="nav-item nav-link" ><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="servico" class="nav-item nav-link " ><i class="fa fa-table me-2"></i>Serviços</a>
-                    <a href="receipts" class="nav-item nav-link "><i class="fa fa-table me-2"></i>Recibos</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>

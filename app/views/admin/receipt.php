@@ -33,7 +33,7 @@ $this->view( "_includes/admin_header", $data);
                         <div class="bg-secondary rounded h-100 p-4">
                             
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h6 class="mb-0">Responsive Table</h6>
+                            <h6 class="mb-0">Recibos</h6>
                              <button type="button" class="btn btn-link m-2 " data-bs-toggle="modal" data-bs-target="#receiptModal"><i class="fa fa-plus"></i> Adicionar novo</button>
                               </div>
                             <div class="table-responsive">
@@ -45,11 +45,13 @@ $this->view( "_includes/admin_header", $data);
                                             <th scope="col">Valor Por Hora</th>
                                             <th scope="col">Numero De Horas</th>
                                             <th scope="col">Valor Final</th>
-                                            <th scope="col">Status</th>                                        </tr>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Açao</th>                                        
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                        <?php if (!empty($data[''])): ?> 
+                                        <?php if (!empty($data['idReceipt'])): ?> 
                                     
                                         <?php foreach ($data['idReceipt'] as $index => $receipt): ?>
                                             <?php
@@ -65,33 +67,33 @@ $this->view( "_includes/admin_header", $data);
                                                 }
                                             ?>
                                             <td><?php echo $index +1; ?></td>
-                                            <td><?php echo htmlspecialchars($receipt['Serviço']); ?></td>
+                                            <td><?php echo htmlspecialchars($receipt['servico']); ?></td>
                                             <td><?php echo htmlspecialchars($receipt['ValorPorHora']); ?></td>
                                             <td><?php echo htmlspecialchars($receipt['NumHoras']); ?></td>
                                             <td><?php echo htmlspecialchars($receipt['ValorFinal']); ?></td>
-                                        <?php if ($receipt['PaymentStatus_idPaymentStatus'  == 1]): ?>
-
-                                            <td><span class="label label-warning label-mini" style="cursor:pointer"
-                                            onclick="disabled_row(<?php echo $receipt ['idReceipt'];?>,<?php echo $receipt['PaymentStatus_idPaymentStatus'];?>)">Pago</span></td>
-
-                                        <?php elseif($receipt['PaymentStatus_idPaymentStatus'  == 2]): ?>
-                                    
-                                            <td><span class="label label-warning label-mini" style="cursor:pointer"
-                                            onclick="disabled_row(<?php echo $receipt ['idReceipt'];?>,<?php echo $receipt['PaymentStatus_idPaymentStatus'];?>)">Em Pagamento</span></td>
-                                        
-                                        <?php elseif($receipt['PaymentStatus_idPaymentStatus'  == 3]): ?>
-                                            
-                                            <td><span class="label label-warning label-mini" style="cursor:pointer"
-                                            onclick="disabled_row(<?php echo $receipt ['idReceipt'];?>,<?php echo $receipt['PaymentStatus_idPaymentStatus'];?>)">Por pagar</span></td>
-                                        
-                                        <?php endif; ?>
+                                            <?php if (isset($receipt['PaymentStatus_idPaymentStatus'])):?>
+                                                <?php if ($receipt['PaymentStatus_idPaymentStatus'] === 1):?>
+                                                    <td><span class="label label-warning label-mini" style="cursor:pointer"
+                                                            onclick="payment_status(<?php echo $receipt['idReceipt'];?>,<?php echo $receipt['PaymentStatus_idPaymentStatus'];?>)">Pago</span></td>
+                                                <?php elseif ($receipt['PaymentStatus_idPaymentStatus'] === 2):?>
+                                                    <td><span class="label label-warning label-mini" style="cursor:pointer"
+                                                            onclick="payment_status(<?php echo $receipt['idReceipt'];?>,<?php echo $receipt['PaymentStatus_idPaymentStatus'];?>)">Em Pagamento</span></td>
+                                                <?php elseif ($receipt['PaymentStatus_idPaymentStatus'] === 3):?>
+                                                    <td><span class="label label-warning label-mini" style="cursor:pointer"
+                                                            onclick="payment_status(<?php echo $receipt['idReceipt'];?>,<?php echo $receipt['PaymentStatus_idPaymentStatus'];?>)">Por pagar</span></td>
+                                                <?php endif;?>
+                                            <?php endif;?>
                                     <td><div class="btn-group" role="group">
-                                        <button type="button" href="<?= ROOT ?>category/edit" class="btn btn-outline-primary">Editar</button>
-                                        <?php if ($servico['status'] == 1) :?>
+                                        <button type="button" href="<?= ROOT ?>category/edit" class="btn btn-outline-primary"
+                                        onclick="openEditModal(<?php echo htmlspecialchars($receipt['idReceipt']);?>,
+                                            '<?php echo htmlspecialchars($receipt['servico']); ?>',
+                                            '<?php echo htmlspecialchars($receipt['ValorPorHora']); ?>',
+                                            '<?php echo htmlspecialchars($receipt['NumHoras']); ?>',)">Editar</button>
+                                        <?php if ($receipt['PaymentStatus_idPaymentStatus'] == 1) :?>
                                         <button type="button" href="<?= ROOT ?>category/delete" class="btn btn-outline-primary"
                                             onclick="openDeleteModal(<?php echo htmlspecialchars($receipt['idReceipt']);?>)">Deletar</button>
                                         <?php else: ?>
-                                            <button type="button" href="<?= ROOT ?>category/delete" class="btn btn-outline-primary"
+                                            <button type="button" href="<?= ROOT ?>receipt/delete" class="btn btn-outline-primary"
                                             onclick="deleteError()">Deletar</button>
                                         <?php endif; ?>
                                     </div></td>
@@ -132,6 +134,58 @@ $this->view( "_includes/admin_header", $data);
                 </div>
               </div>
             </div>
+            <div id="deleteGroupModal" class="modal fade" tabindex="-1" aria-labelledby="deleteGroupModal-Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-secondary">
+                        <form id="deleteGroup">
+                            <div class="modal-header">
+                                 <h4 class="modal-title">Apagar grupo</h4>
+                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Tem a certeza que quer apagar este serviço?</p>
+                                <p class="text-warning"><small>A açao é irreversivel.</small></p>
+                                <input id="deleteGroupId" name="deleteGroupId" type="hidden" class="form-control" value="">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" onclick="delete_row(document.getElementById('deleteGroupId').value)">Apagar</button>
+                            </div>               
+                        </form>
+                    </div>
+                </div>
+            </div>
+<div id="editGroupModal" class="modal fade" tabindex="-1" aria-labelledby="editGroupModal-Label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+            <form id="editGroup">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar serviço</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm">
+                        <div class="form-group">
+                            <label for="category-name" class="col-form-label" >Serviço:</label>
+                            <input id="editService" name="editService" type="text" class="form-control">
+                            <input id="editGroupId" name="editGroupId"  hidden class="form-control" value="">
+                            <label for="category-name" class="col-form-label">Valor Por Hora:</label>
+                            <input type="number" class="form-control" id="Valor_Por_Hora" name="Valor_Por_Hora">
+                            <label for="category-name" class="col-form-label">Numero de Horas:</label>
+                            <input type="number" class="form-control" id="Num_Horas" name="Num_Horas">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="edit_receipt()">Editar</button>
+                </div>               
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
     function get_data() {
@@ -158,6 +212,7 @@ $this->view( "_includes/admin_header", $data);
     }
 
     function send_data(data = {}){
+        // console.log('Sending data to server:', data);
 
         var ajax = new XMLHttpRequest();
 
@@ -170,45 +225,10 @@ $this->view( "_includes/admin_header", $data);
 
         ajax.open("POST", "<?=ROOT?>receipts/receipt",true);
         ajax.setRequestHeader("Content-Type", "application/json");
+        
         ajax.send(JSON.stringify(data));
     }
 
-    // function handle_result(result) {
-    //     console.log("The result is" + result);
-        
-    //     if (result !== "") {
-    //         try {
-    //             var obj = JSON.parse(result);
-    //             if (obj.data_type === "add_receipt") {
-    //                 if (obj.message_type === "info") {
-    //                     Swal.fire({
-    //                         icon: 'success',
-    //                         title: 'Success',
-    //                         text: obj.message
-    //                     }).then(() => {
-    //                         $('#receiptModal').modal('hide');
-    //                         location.reload();
-    //                     });
-    //                 } else {
-    //                     Swal.fire({
-    //                         icon: 'error',
-    //                         title: 'Error',
-    //                         text: obj.message
-    //                     });
-    //                 }
-    //             }
-    //         } catch (e) {
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Error',
-    //                 text: 'An error occurred while processing the server response.'
-    //             });
-    //         }
-    //     }
-    // }
-
-    // The result is{"message":"Servi\u00e7o adicionado com sucesso!","message_type":"info","data_type":"add_service","data":""}
-    // </pre>{"message":"Servi\u00e7o adicionado com sucesso!","message_type":"info","data_type":"add_receipt","data":""}
     function handle_result(result) {
         console.log("The result is" + result);
         
@@ -234,7 +254,7 @@ $this->view( "_includes/admin_header", $data);
                     }
                 }
 
-                if (obj.data_type === "edit_service") {
+                if (obj.data_type === "edit_receipt") {
                     if (obj.message_type === "info") {
                         Swal.fire({
                             icon: 'success',
@@ -253,11 +273,11 @@ $this->view( "_includes/admin_header", $data);
                     }
                 }
 
-                if (obj.data_type === "disabled_row"){
+                if (obj.data_type === "payment_status"){
                     location.reload();
                 }
 
-                if (obj.data_type === "delete_service") {
+                if (obj.data_type === "delete_receipt") {
                     if (obj.message_type === "info") {
                         Swal.fire({
                             icon: 'success',
@@ -282,6 +302,71 @@ $this->view( "_includes/admin_header", $data);
                 });
             }
         }
+    }
+
+    function payment_status(idReceipt, state) {
+    send_data(data = {
+        data_type: "payment_status",
+        idReceipt: idReceipt,
+        current_state: state
+    });
+    // console.log(data);
+    }
+    function openDeleteModal(idReceipt){
+        document.getElementById('deleteGroupId').value =idReceipt;
+
+        $('#deleteGroupModal').modal('show');
+
+    }
+    function delete_row(idReceipt)
+    {
+        send_data(data={
+            data_type:"delete_receipt",
+            id:idReceipt
+        });
+    }
+    function deleteError(){
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: "Voce nao pode apagar um Por Pagar ou Em Pagamento"
+        });
+    }
+    function openEditModal(idReceipt,servico,ValorPorHora,NumHoras){
+        document.getElementById('editGroupId').value =idReceipt;
+        document.getElementById('editService').value =servico;
+        document.getElementById('Valor_Por_Hora').value =ValorPorHora;
+        document.getElementById('NumHoras').value = NumHoras;
+        $('#editGroupModal').modal('show');
+    }
+    function edit_receipt() {
+        
+        let servico_input = document.querySelector("#editService").value.trim();
+        let ValorPorHora_input = document.querySelector("#Valor_Por_Hora").value;
+        let NumHoras_input = document.querySelector("#Num_Horas").value;
+        let id_input = document.querySelector("#editGroupId").value;
+
+        // Validação básica dos campos
+        if (servico_input === "" || isNaN(id_input)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Por favor, preencha os campos corretamente.'
+            });
+            return;
+        }
+
+        // Objeto com os dados a serem enviados
+        let data = {
+            servico: servico_input,
+            ValorPorHora: ValorPorHora_input,
+            NumHoras: NumHoras_input,
+            id: id_input,
+            data_type: 'edit_receipt' // Data_type corrigido para 'edit_service'
+        };
+ 
+        // Envio dos dados para o controlador PHP via função send_data
+        send_data(data);
     }
 
 </script>

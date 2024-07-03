@@ -54,8 +54,20 @@ $this->view( "_includes/admin_header", $data);
                                         <?php $status = $servico['status'] ? "Inativo" : "Ativo"; ?>
                                     <td><?php echo $index +1; ?></td>
                                     <td><?php echo htmlspecialchars($servico['TipoServico']); ?></td>
-                                    <td><?php echo htmlspecialchars($servico['DataInicio']); ?></td>
-                                    <td><?php echo htmlspecialchars($servico['DataFim']); ?></td>
+                                    <td> 
+                                        <?php
+                                         //Supondo que $product['date'] está no formato Y-m-d H:i:s
+                                            $date = new DateTime($servico['DataInicio']);
+                                            echo htmlspecialchars($date->format('jS M, Y'));
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                         //Supondo que $product['date'] está no formato Y-m-d H:i:s
+                                            $date = new DateTime($servico['DataFim']);
+                                            echo htmlspecialchars($date->format('jS M, Y'));
+                                        ?>
+                                    </td>
                                     <?php if ($servico['status']): ?>
 
                                         <td><span class="label label-warning label-mini" style="cursor:pointer"

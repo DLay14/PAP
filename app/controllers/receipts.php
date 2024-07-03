@@ -16,7 +16,7 @@ class Receipts extends Controller
             }
 
             $receiptModel = $this->load_model('Receipt');
-            $data['Serviço'] = $receiptModel->get_receipt();
+            $data['idReceipt'] = $receiptModel->get_receipt();
             // show($data);
             $this->view("receipt", $data);
     }
@@ -53,10 +53,75 @@ class Receipts extends Controller
                     $arr['message_type'] = "info";
                     $arr['data_type'] = "add_receipt";
                 }
+                
+                $arr['data'] = "";
+                echo json_encode($arr);
             }
+            elseif($data->data_type === 'payment_status') {
+                $idReceipt = $data->idReceipt;
+                
+                if ($data->current_state == 1) {
+                    $status = 3;
+                } elseif ($data->current_state == 2) {
+                    $status = 1;
+                } else {
+                    $status = 2;
+                }
 
-            $arr['data'] = "";
-            echo json_encode($arr);
+                $query = "UPDATE receipt SET PaymentStatus_idPaymentStatus = :PaymentStatus_idPaymentStatus Where idReceipt = :idReceipt Limit 1";
+                $params = array(':PaymentStatus_idPaymentStatus' => $status, ':idReceipt' => $idReceipt);
+                $DB = Database::getInstance();
+                $DB->write($query, $params);
+                // var_dump($params);
+                $arr['message'] = "";
+                $_SESSION['error'] = "";
+                $arr['message_type'] = "info";
+                $arr['data'] = "";
+                $arr['data_type'] = "payment_status";
+
+                echo json_encode($arr);
+            }
+            elseif ($data->data_type == 'delete_receipt') {
+                $check = $receipt->delete($data->id);
+                if ($check === true) {
+                    $arr['message'] = "O seu serviço foi removido com sucesso!";
+                    $arr['message_type'] = "info";
+                } else {
+                    $arr['message'] = "Erro ao remover o serviço!";
+                    $arr['message_type'] = "error";
+                }
+                $_SESSION['error'] = "";
+                $arr['data'] = "";
+                $arr['data_type'] = "delete_receipt";
+    
+                echo json_encode($arr);
+            } 
+            elseif ($data->data_type == 'edit_receipt') {
+
+                $id = $data->id; 
+
+                $new_servico = $data->servico; 
+                $ValorPorHora = $data->ValorPorHora; 
+                $NumHoras = $data->NumHoras;
+                
+                
+                $check = $receipt->edit($id, $new_servico, $ValorPorHora, $NumHoras);
+    
+                if ($check) {
+                    $arr['message'] = "Recibo editado com sucesso!";
+                    $arr['message_type'] = "info";
+                } else {
+                    $arr['message'] = "Erro ao editar o recibo!";
+                    $arr['message_type'] = "error";
+                }
+                $_SESSION['error'] = "";
+                $arr['data'] = "";
+                $arr['data_type'] = "edit_receipt";
+    
+                echo json_encode($arr);
+            }           
         }
+        
     }
+    
 }

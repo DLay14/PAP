@@ -111,9 +111,5 @@ class Ajax extends Controller
             echo json_encode($arr);
         }
     }
-
-
-
-
 }
 ?>

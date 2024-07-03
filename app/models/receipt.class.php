@@ -21,7 +21,7 @@ Class Receipt
                 return false;
             }
 
-            $PaymentStatus_idPaymentStatus = 0;
+            $PaymentStatus_idPaymentStatus = 3;
 
             $query = "INSERT INTO receipt (servico, ValorPorHora, NumHoras, ValorFinal, PaymentStatus_idPaymentStatus) VALUES (:servico, :ValorPorHora, :NumHoras, :ValorFinal, :PaymentStatus_idPaymentStatus)";           
             
@@ -34,7 +34,7 @@ Class Receipt
             );
             
             $check = $DB->write($query, $params);
-            show($check); // show the result
+            // show($check); // show the result
 
 
             if($check) {
@@ -58,4 +58,51 @@ Class Receipt
 
         return json_decode(json_encode($result), true);
     }
+
+    public function delete($id)
+    {
+        $DB = Database::getInstance();
+        $id = (int)$id;
+        $query = "DELETE FROM receipt WHERE idReceipt = '$id' LIMIT 1";
+        $result = $DB->write($query);
+        return $result;
+    }
+
+    public function edit($id, $new_servico, $ValorPorHora, $NumHoras) {
+        
+        $DB = Database::getInstance();
+
+        $new_servico = ucwords(trim($new_servico));
+        $ValorPorHora = trim($ValorPorHora);
+        $NumHoras = trim($NumHoras);
+
+        if(empty($ValorPorHora)){
+            $ValorPorHora = 0;
+        }elseif(empty($NumHoras)){
+            $NumHoras = 0;
+        }
+
+        $ValorFinal = (float) trim($NumHoras * $ValorPorHora);  
+
+
+        if (!preg_match("/^[a-zA-Z]+$/", $new_servico)){
+            $_session['error'] = "Por favor insira um serviço valido!";
+            return false;
+        }
+        
+        // Prepara a consulta SQL
+        $query = "UPDATE receipt SET servico = :servico, ValorPorHora = :ValorPorHora, NumHoras = :NumHoras, ValorFinal = :ValorFinal WHERE idReceipt = :idReceipt LIMIT 1";
+        $params = array(
+            ':servico' => $new_servico,
+            ':ValorPorHora' => $ValorPorHora,
+            ':NumHoras' => $NumHoras,
+            ':ValorFinal' => $ValorFinal,
+            ':idReceipt' => $id
+        );
+
+
+        // Executa a consulta usando o método write do objeto Database
+        return $DB->write($query, $params);
+    }
+    
 }
