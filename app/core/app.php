@@ -2,7 +2,7 @@
 class App
 {
     // Controlador padrão
-    protected $controller = "home";
+    protected $controller = "login";
     // Método padrão
     protected $method = "index";
     // Parâmetros da URL
@@ -13,6 +13,7 @@ class App
     {
         // Obtém a URL parseada
         $url = $this->parseURL();
+        
 
         // Verifica se o arquivo do controlador existe
         if(file_exists("../app/controllers/" . strtolower($url[0]) . ".php"))

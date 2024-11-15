@@ -205,8 +205,7 @@
         options: {
             responsive: true
         }
-    });
-
+    });    
     
 })(jQuery);
 

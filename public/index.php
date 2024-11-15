@@ -11,7 +11,7 @@ define('ROOT', $path);
 
 define('ASSETS', $path . "assets/");
 
-define('THEME', 'admin/');
+//define('THEME', 'admin/');
 
 // Inclui o arquivo de inicialização
 include "../app/init.php";
